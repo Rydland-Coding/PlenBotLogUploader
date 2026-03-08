@@ -261,3 +261,4 @@ __pycache__/
 *.pyc
 /info
 /DiscordApi/emoji
+Properties/PublishProfiles/FolderProfile.pubxml

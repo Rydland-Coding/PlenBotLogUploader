@@ -199,7 +199,7 @@ public partial class FormDiscordWebhooks : Form
                 }
             ),
             (
-                new List<string> { "Tempest", "Weaver", "Catalyst", "Elementalist"},
+                new List<string> { "Tempest", "Weaver", "Catalyst", "Evoker", "Elementalist" },
                 new List<(int, double)>
                 {
                     (51662, 4/2.5), //Transmute Lightning & Shocking Aura
@@ -227,10 +227,14 @@ public partial class FormDiscordWebhooks : Form
                     (5721,  1), //Deep Freeze
                     (71966,  1), //Dazing Discharge
                     (46140,  1), //Katabatic Wind
+                    (76707, 1), // Seismic Impact
+                    (76681, 1), // Seismic Impact
+                    (76841, 1), //Elemental Procession
+
                 }
             ),
             (
-                new List<string> { "Specter","Daredevil","Deadeye","Thief"},
+                new List<string> { "Specter","Daredevil","Deadeye", "Antiquary", "Thief"},
                 new List<(int, double)>
                 {
                     (13012, 1), //Head Shot
@@ -252,7 +256,7 @@ public partial class FormDiscordWebhooks : Form
                 }
             ),
             (
-                new List<string> { "Spellbreaker","Berserker","Bladesworn","Warrior"},
+                new List<string> { "Spellbreaker","Berserker","Bladesworn", "Paragon", "Warrior" },
                 new List<(int, double)>
                 {
                     (14359, 1), //Staggering Blow
@@ -284,10 +288,11 @@ public partial class FormDiscordWebhooks : Form
                     (41919, 1), //Imminent Threat
                     (72026, 1), //Snap Pull
                     (29679, 1), //Skull Grinder
+
                 }
             ),
             (
-                new List<string> { "Scrapper","Holosmith","Mechanist","Engineer"},
+                new List<string> { "Scrapper","Holosmith","Mechanist", "Amalgam", "Engineer"},
                 new List<(int, double)>
                 {
                     (6054,  1), //Static Shield
@@ -322,11 +327,13 @@ public partial class FormDiscordWebhooks : Form
                     (30828, 1), //Slick Shoes
                     (5913,  1), //Explosive Rockets
                     (5893,  1), //Electrified Net
-                    (63253, 1), //Force Signet                    
+                    (63253, 1), //Force Signet
+                    (77069, 1), //Solid State
+                    (76993, 1), //Flux State
                 }
             ),
             (
-                new List<string> { "Firebrand","Dragonhunter","Willbender","Guardian" },
+                new List<string> { "Firebrand","Dragonhunter","Willbender", "Luminary", "Guardian" },
                 new List<(int, double)>
                 {
                     (40624, 1/5), //Symbol of Vengeance - hits / 5
@@ -350,10 +357,17 @@ public partial class FormDiscordWebhooks : Form
                     (62561, 1), //Heaven's Palm
                     (71817, 1), //Jurisdiction (projectile)
                     (71819, 1), //Jurisdiction (detonation)
+                    (76813, 1), //Effulgent Stance
+                    (76687, 1), //Daring Advance (Ground Target)
+                    (77198, 1), //Daring Advance (Leap)
+                    (77078, 1), //Piercing Stance
+                    (77339, 1), //Dazzling Hammer
+                    (76978, 1), //Brilliant Slam
+
                 }
             ),
             (
-                new List<string> { "Renegade","Vindicator","Herald","Revenant" },
+                new List<string> { "Renegade","Vindicator","Herald", "Conduit", "Revenant" },
                 new List<(int, double)>
                 {
                     (41820, 1), //Scorchrazor
@@ -372,7 +386,7 @@ public partial class FormDiscordWebhooks : Form
                 }
             ),
             (
-                new List<string> { "Druid","Untamed","Soulbeast","Ranger" },
+                new List<string> { "Druid","Untamed","Soulbeast", "Galeshot", "Ranger" },
                 new List<(int, double)>
                 {
                     (31318, 1), //Lunar Impact
@@ -401,10 +415,12 @@ public partial class FormDiscordWebhooks : Form
                     (44360, 1), //Fear
                     (43375, 1), //Prelude Lash
                     (71841, 1), //Wild Strikes
+                    (77211, 1), //Wind Shear
+                    (76979, 1), //Perfect Storm
                 }
             ),
             (
-                new List<string> { "Chronomancer","Mirage","Virtuoso","Mesmer" },
+                new List<string> { "Chronomancer","Mirage","Virtuoso", "Troubadour","Mesmer" },
                 new List<(int, double)>
                 {
                     (10363, 1), //Into the Void
@@ -426,11 +442,13 @@ public partial class FormDiscordWebhooks : Form
                     (10341, 1), //Phantasmal Defender
                     (30192, 1), //Lesser Phantasmal Defender
                     (29856, 1/4), //Well of Senility
+                    (77079, 1), //Deafening Drum
+                    (77066, 1), //Tale of the Tortured Mastermind
 
                 }
             ),
             (
-                new List<string> { "Reaper","Scourge","Harbinger","Necromancer" },
+                new List<string> { "Reaper","Scourge","Harbinger", "Ritualist","Necromancer" },
                 new List<(int, double)>
                 {
                     (10633, 1), //Ripple of Horror
@@ -448,6 +466,9 @@ public partial class FormDiscordWebhooks : Form
                     (62539, 1), //Voracious Arc
                     (62563, 1), //Vital Draw
                     (71998, 1), //Devouring Visage
+                    (76741, 1), //Wanderlust
+                    (76961, 1), //Wanderlust
+
                 }
             )
 
@@ -642,6 +663,9 @@ public partial class FormDiscordWebhooks : Form
                     case 5562: //Gale
                     case 46018: //Mud Slide
                     case 62947: //Wind Storm
+                    case 76707: //Seismic Impact
+                    case 76681: //Seismic Impact
+                    case 76841: //Elemental Procession
                         //incSkills[0].knockdown += incData[i][j].Hits;
                         tracking.cc.Total += incData[i][j].Hits;
                         tracking.cc.Missed += incData[i][j].Missed;
@@ -833,6 +857,8 @@ public partial class FormDiscordWebhooks : Form
                         break;
                     case 63249: //Mind Shock
                     case 13031: //Pistol Whip
+                    case 76582: //Metal Legion Guitar
+                    case 76591: //Metal Legion Guitar
                         //incSkills[5].stun += incData[i][j].Hits;
                         tracking.cc.Total += incData[i][j].Hits;
                         tracking.cc.Missed += incData[i][j].Missed;
@@ -1057,6 +1083,7 @@ public partial class FormDiscordWebhooks : Form
                     case 5868: //Supply Crate
                     case 63234: //Rocket Fist Prototype
                     case 71888: //Essence of Borrowed Time
+                    case 77069: //Solid State
                         //incSkills[6].stun += incData[i][j].Hits;
                         tracking.cc.Total += incData[i][j].Hits;
                         tracking.cc.Missed += incData[i][j].Missed;
@@ -1130,6 +1157,7 @@ public partial class FormDiscordWebhooks : Form
                     case 40160: //Radiant Arc
                     case 45732: //Particle Accelerator
                     case 72977: //Roiling Skies
+                    case 77103: //Offensive Protocol: Shred
                         //incSkills[6].cripple += incData[i][j].Hits;
                         //incSkills[6].softCC += incData[i][j].Hits;
                         break;
@@ -1141,6 +1169,7 @@ public partial class FormDiscordWebhooks : Form
                         break;
                     case 5996: //Magnet
                     case 41843: //Prismatic Singularity
+                    case 76993: //Flux State
                         //incSkills[6].pull += incData[i][j].Hits;
                         tracking.cc.Total += incData[i][j].Hits;
                         tracking.cc.Missed += incData[i][j].Missed;
@@ -1267,6 +1296,15 @@ public partial class FormDiscordWebhooks : Form
                         tracking.cc.Missed += incData[i][j].Missed / 9;
                         tracking.cc.Blocked += incData[i][j].Blocked / 9;
                         break;
+                    case 77339: //Dazzling Hammer
+                    case 76978: //Brilliant Slam
+                    case 77078: //Piercing Stance
+                    case 76813: //Effulgent Stance
+                        //incSkills[4].daze += incData[i][j].Hits;
+                        tracking.cc.Total += incData[i][j].Hits;
+                        tracking.cc.Missed += incData[i][j].Missed;
+                        tracking.cc.Blocked += incData[i][j].Blocked;
+                        break;
                     case 29630: //Deflecting Shot
                         //incSkills[4].blind += incData[i][j].Hits;
                         //incSkills[4].softCC += incData[i][j].Hits;
@@ -1300,6 +1338,8 @@ public partial class FormDiscordWebhooks : Form
                         //incSkills[4].softCC += incData[i][j].Hits * 3;
                         break;
                     case 62549: //Heel Crack
+                    case 76687: //Daring Advance
+                    case 77198: //Daring Advance
                         //incSkills[4].stun += incData[i][j].Hits;
                         tracking.cc.Total += incData[i][j].Hits;
                         tracking.cc.Missed += incData[i][j].Missed;
@@ -1479,6 +1519,7 @@ public partial class FormDiscordWebhooks : Form
                     case 67179: //Slam - ID seems incorrect?
                     case 12476: //Spike Trap
                     case 71002: //Dimension Breach
+                    case 76979: //Perfect Storm
                         //incSkills[2].launch += incData[i][j].Hits;
                         tracking.cc.Total += incData[i][j].Hits;
                         tracking.cc.Missed += incData[i][j].Missed;
@@ -1518,6 +1559,7 @@ public partial class FormDiscordWebhooks : Form
                     case 30448: //Glyph of the Tides (non-celestial)
                     case 43068: //Tail Lash
                     case 41908: //Wing Buffet
+                    case 77211: //Wind Shear
                         //incSkills[2].knockback += incData[i][j].Hits;
                         tracking.cc.Total += incData[i][j].Hits;
                         tracking.cc.Missed += incData[i][j].Missed;
@@ -1668,6 +1710,13 @@ public partial class FormDiscordWebhooks : Form
                     case 72007: //Phantasmal Sharpshooter
                     case 72957: //Mental Collapse
                         //incSkills[7].stun += incData[i][j].Hits;
+                        tracking.cc.Total += incData[i][j].Hits;
+                        tracking.cc.Missed += incData[i][j].Missed;
+                        tracking.cc.Blocked += incData[i][j].Blocked;
+                        break;
+                    case 77079: // Deafening Drum
+                         //incSkills[7].stun += incData[i][j].Hits;
+                         //incSkills[7].daze += incData[i][j].Hits;
                         tracking.cc.Total += incData[i][j].Hits;
                         tracking.cc.Missed += incData[i][j].Missed;
                         tracking.cc.Blocked += incData[i][j].Blocked;
@@ -1891,6 +1940,8 @@ public partial class FormDiscordWebhooks : Form
                         tracking.cc.Blocked += incData[i][j].Blocked;
                         break;
                     case 44296: //Oppressive Collapse
+                    case 76741: //Wanderlust
+                    case 76961: //Wanderlust
                         //incSkills[3].knockdown += incData[i][j].Hits;
                         tracking.cc.Total += incData[i][j].Hits;
                         tracking.cc.Missed += incData[i][j].Missed;
