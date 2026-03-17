@@ -54,6 +54,8 @@
             radioButtonLogSummarySquad = new System.Windows.Forms.RadioButton();
             radioButtonLogSummaryNone = new System.Windows.Forms.RadioButton();
             groupBox1 = new System.Windows.Forms.GroupBox();
+            checkBoxIncludeInvulnerableSummary = new System.Windows.Forms.CheckBox();
+            checkBoxIncludeIncomingDefensiveStats = new System.Windows.Forms.CheckBox();
             checkBoxIncludeStabilitySummary = new System.Windows.Forms.CheckBox();
             checkBoxIncludeDownsContributionSummary = new System.Windows.Forms.CheckBox();
             checkBoxShowFightAwards = new System.Windows.Forms.CheckBox();
@@ -82,7 +84,6 @@
             textboxBlueTeamIds = new System.Windows.Forms.TextBox();
             textboxRedTeamIds = new System.Windows.Forms.TextBox();
             textboxGreenTeamIds = new System.Windows.Forms.TextBox();
-            checkBoxIncludeIncomingDefensiveStats = new System.Windows.Forms.CheckBox();
             groupBoxWebhookInfo.SuspendLayout();
             groupBoxBossesEnable.SuspendLayout();
             groupBoxConditionalPost.SuspendLayout();
@@ -392,6 +393,7 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(checkBoxIncludeInvulnerableSummary);
             groupBox1.Controls.Add(checkBoxIncludeIncomingDefensiveStats);
             groupBox1.Controls.Add(checkBoxIncludeStabilitySummary);
             groupBox1.Controls.Add(checkBoxIncludeDownsContributionSummary);
@@ -415,6 +417,29 @@
             groupBox1.TabIndex = 10;
             groupBox1.TabStop = false;
             groupBox1.Text = "Player report information";
+            groupBox1.Enter += groupBox1_Enter;
+            // 
+            // checkBoxIncludeInvulnerableSummary
+            // 
+            checkBoxIncludeInvulnerableSummary.AutoSize = true;
+            checkBoxIncludeInvulnerableSummary.Location = new System.Drawing.Point(226, 47);
+            checkBoxIncludeInvulnerableSummary.Name = "checkBoxIncludeInvulnerableSummary";
+            checkBoxIncludeInvulnerableSummary.Size = new System.Drawing.Size(186, 19);
+            checkBoxIncludeInvulnerableSummary.TabIndex = 22;
+            checkBoxIncludeInvulnerableSummary.Text = "Include invulnerable summary";
+            checkBoxIncludeInvulnerableSummary.UseVisualStyleBackColor = true;
+            checkBoxIncludeInvulnerableSummary.CheckedChanged += checkBoxIncludeInvulnerableSummary_CheckedChanged;
+            // 
+            // checkBoxIncludeIncomingDefensiveStats
+            // 
+            checkBoxIncludeIncomingDefensiveStats.AutoSize = true;
+            checkBoxIncludeIncomingDefensiveStats.Location = new System.Drawing.Point(11, 22);
+            checkBoxIncludeIncomingDefensiveStats.Margin = new System.Windows.Forms.Padding(4);
+            checkBoxIncludeIncomingDefensiveStats.Name = "checkBoxIncludeIncomingDefensiveStats";
+            checkBoxIncludeIncomingDefensiveStats.Size = new System.Drawing.Size(199, 19);
+            checkBoxIncludeIncomingDefensiveStats.TabIndex = 21;
+            checkBoxIncludeIncomingDefensiveStats.Text = "Include incoming defensive stats";
+            checkBoxIncludeIncomingDefensiveStats.UseVisualStyleBackColor = true;
             // 
             // checkBoxIncludeStabilitySummary
             // 
@@ -431,7 +456,7 @@
             // checkBoxIncludeDownsContributionSummary
             // 
             checkBoxIncludeDownsContributionSummary.AutoSize = true;
-            checkBoxIncludeDownsContributionSummary.Location = new System.Drawing.Point(226, 49);
+            checkBoxIncludeDownsContributionSummary.Location = new System.Drawing.Point(226, 22);
             checkBoxIncludeDownsContributionSummary.Name = "checkBoxIncludeDownsContributionSummary";
             checkBoxIncludeDownsContributionSummary.Size = new System.Drawing.Size(229, 19);
             checkBoxIncludeDownsContributionSummary.TabIndex = 11;
@@ -502,6 +527,7 @@
             checkBoxIncludeCCSummary.TabIndex = 11;
             checkBoxIncludeCCSummary.Text = "Include CC summary";
             checkBoxIncludeCCSummary.UseVisualStyleBackColor = true;
+            checkBoxIncludeCCSummary.CheckedChanged += checkBoxIncludeCCSummary_CheckedChanged;
             // 
             // checkBoxIncludeStripSummary
             // 
@@ -719,17 +745,6 @@
             textboxGreenTeamIds.Size = new System.Drawing.Size(145, 23);
             textboxGreenTeamIds.TabIndex = 2;
             // 
-            // checkBoxIncludeIncomingDefensiveStats
-            // 
-            checkBoxIncludeIncomingDefensiveStats.AutoSize = true;
-            checkBoxIncludeIncomingDefensiveStats.Location = new System.Drawing.Point(11, 22);
-            checkBoxIncludeIncomingDefensiveStats.Margin = new System.Windows.Forms.Padding(4);
-            checkBoxIncludeIncomingDefensiveStats.Name = "checkBoxIncludeIncomingDefensiveStats";
-            checkBoxIncludeIncomingDefensiveStats.Size = new System.Drawing.Size(199, 19);
-            checkBoxIncludeIncomingDefensiveStats.TabIndex = 21;
-            checkBoxIncludeIncomingDefensiveStats.Text = "Include incoming defensive stats";
-            checkBoxIncludeIncomingDefensiveStats.UseVisualStyleBackColor = true;
-            // 
             // FormEditDiscordWebhook
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -753,6 +768,7 @@
             StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             Text = "FormEditDiscordWebhook";
             FormClosing += FormEditDiscordWebhook_FormClosing;
+            Load += FormEditDiscordWebhook_Load;
             groupBoxWebhookInfo.ResumeLayout(false);
             groupBoxWebhookInfo.PerformLayout();
             groupBoxBossesEnable.ResumeLayout(false);
@@ -830,5 +846,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.CheckBox checkBoxIncludeStabilitySummary;
         private System.Windows.Forms.CheckBox checkBoxIncludeIncomingDefensiveStats;
+        private System.Windows.Forms.CheckBox checkBoxIncludeInvulnerableSummary;
     }
 }

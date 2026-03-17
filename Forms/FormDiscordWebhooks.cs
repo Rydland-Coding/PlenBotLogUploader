@@ -528,6 +528,7 @@ public partial class FormDiscordWebhooks : Form
         public double Total { get; set; }
         public double Missed { get; set; }
         public double Blocked { get; set; }
+    //    public double Invuln { get; set; }
     }
 
     private (Tracking hits, Tracking cc, Tracking strips) TrackIncoming(TotalDamageTaken[][] incData)
@@ -546,6 +547,9 @@ public partial class FormDiscordWebhooks : Form
 
                 //track total blocks
                 tracking.hits.Blocked += incData[i][j].Blocked;
+
+                //Rydland
+               // tracking.hits.Invuln += incData[i][j].InvulnedCount;
 
                 switch (incData[i][j].Id)
                 {
@@ -2090,6 +2094,12 @@ public partial class FormDiscordWebhooks : Form
             IEnumerable<Target> enemies => enemies.Select(x => x.Defenses[0].DeadCount).Sum(),
             _ => 0
         };
+        var teamInvuln = team switch
+        {
+            IEnumerable<Player> players => players.Select(x => x.Defenses[0].InvulnedCount).Sum(),
+            IEnumerable<Target> enemies => enemies.Select(x => x.Defenses[0].InvulnedCount).Sum(),
+        };
+        
 
         var teamSummary = new TextTable(2, TableBordersStyle.BLANKS, TableVisibleBorders.NONE);
         teamSummary.SetColumnWidthRange(0, 8, 8);
@@ -2117,6 +2127,9 @@ public partial class FormDiscordWebhooks : Form
 
         teamSummary.AddCell("Deaths:", tableCellLeftAlign);
         teamSummary.AddCell($"{teamDeaths}", tableCellLeftAlign);
+        
+        teamSummary.AddCell("Invuln:", tableCellLeftAlign);
+        teamSummary.AddCell($"{teamInvuln}", tableCellLeftAlign);
 
         var classes = string.Empty;
 
@@ -2170,6 +2183,7 @@ public partial class FormDiscordWebhooks : Form
         preventionSummary.SetColumnWidthRange(0, 2, 2);
         preventionSummary.SetColumnWidthRange(1, 6, 6);
         preventionSummary.SetColumnWidthRange(2, 6, 6);
+      //  preventionSummary.SetColumnWidthRange(3, 6, 6);
         preventionSummary.SetColumnWidthRange(3, 7, 7);
         preventionSummary.SetColumnWidthRange(4, 8, 8);
 
@@ -2192,6 +2206,7 @@ public partial class FormDiscordWebhooks : Form
         preventionSummary.AddCell($"", tableCellLeftAlign);
         preventionSummary.AddCell($"Miss", tableCellRightAlign);
         preventionSummary.AddCell($"Block", tableCellRightAlign);
+       // preventionSummary.AddCell($"Invuln", tableCellRightAlign);
         preventionSummary.AddCell($"Total", tableCellRightAlign);
         preventionSummary.AddCell($"Percent", tableCellRightAlign);
 
@@ -2203,6 +2218,7 @@ public partial class FormDiscordWebhooks : Form
             preventionSummary.AddCell($"{name}", tableCellLeftAlign);
             preventionSummary.AddCell($"{Math.Round(tracking.Missed)}", tableCellRightAlign);
             preventionSummary.AddCell($"{Math.Round(tracking.Blocked)}", tableCellRightAlign);
+           /* preventionSummary.AddCell($"{Math.Round(tracking.Invuln)}", tableCellRightAlign); */
             preventionSummary.AddCell($"{Math.Round(tracking.Total)}", tableCellRightAlign);
             preventionSummary.AddCell($"{Math.Round((tracking.Missed + tracking.Blocked) * 100 / tracking.Total, 2)} %", tableCellRightAlign);
 
@@ -2277,6 +2293,7 @@ public partial class FormDiscordWebhooks : Form
         preventionSummary.AddCell($"{Math.Round(tracking.Missed)}", tableCellLeftAlign);
         preventionSummary.AddCell($"Block:", tableCellLeftAlign);
         preventionSummary.AddCell($"{Math.Round(tracking.Blocked)}", tableCellLeftAlign);
+       // preventionSummary.AddCell($"{Math.Round(tracking.Invuln)}", tableCellLeftAlign);
         preventionSummary.AddCell($"Total:", tableCellLeftAlign);
         preventionSummary.AddCell($"{Math.Round(tracking.Total)}", tableCellLeftAlign);
         preventionSummary.AddCell($"", tableCellLeftAlign);
@@ -2610,9 +2627,24 @@ public partial class FormDiscordWebhooks : Form
 
                     var stabilityField = CreateRankField(webhook, "Stability", stabilityStats, player => player.StabGeneration);
                     if (stabilityField is not null) rankFields.Add(stabilityField);
+
+
                 }
 
+                //RYDLAND
+                if (webhook.IncludeInvulnerableSummary)
+                {
 
+                    // invulnerable summary
+                    var invulnedStats = reportJSON.ExtraJson.Players
+                        .Where(x => !x.FriendlyNpc && !x.NotInSquad && (x.Defenses[0].InvulnedCount > 0))
+                        .OrderByDescending(x => x.Defenses[0].InvulnedCount)
+                        .Take(webhook.MaxPlayers)
+                        .ToArray();
+
+                    var invulnedField = CreateRankField(webhook, "Invulnerable", invulnedStats, p => p.Defenses[0].InvulnedCount);
+                    if (invulnedField is not null) rankFields.Add(invulnedField);
+                }
 
                 // add the fields
                 discordContentEmbed.Fields = new List<DiscordApiJsonContentEmbedField>();

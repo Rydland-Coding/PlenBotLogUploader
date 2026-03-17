@@ -93,7 +93,7 @@ internal sealed class Player
     public BuffUptimes[] BuffUptimes { get; set; }
 
     [JsonProperty("targetDamageDist")]
-    public TargetDamageDist[][][] TargetDamageDist { get; set; }    
+    public TargetDamageDist[][][] TargetDamageDist { get; set; }
 
     [JsonIgnore]
     public int StabGeneration { get; set; }

@@ -36,5 +36,8 @@ internal sealed class Target
 
     [JsonProperty("buffs")]
     public Buffs[] Buffs { get; set; }
+
+    [JsonProperty("invulnedCount")]
+    public int InvulnedCount{ get; set; }
 }
 

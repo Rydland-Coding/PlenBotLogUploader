@@ -17,4 +17,5 @@ public sealed class PlayerSupport
 
     [JsonProperty("resurrectTime")]
     public float ResurrectTime { get; set; }
+
 }

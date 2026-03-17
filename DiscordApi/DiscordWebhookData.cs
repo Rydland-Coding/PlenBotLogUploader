@@ -84,6 +84,9 @@ public sealed class DiscordWebhookData
     //BEAR 
     [JsonProperty("includeStabSummary")]
     internal bool IncludeStabilitySummary { get; set; } = false;
+    //RYDLAND
+    [JsonProperty("includeInvulnerableSummary")]
+    internal bool IncludeInvulnerableSummary { get; set; } = false;
     //BEAR 
     [JsonProperty("adjustBarrier")]
     internal bool AdjustBarrier { get; set; } = false;

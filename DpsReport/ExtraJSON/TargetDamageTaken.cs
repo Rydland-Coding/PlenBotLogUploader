@@ -37,6 +37,9 @@ namespace PlenBotLogUploader.DpsReport.ExtraJson
         [JsonProperty("blocked")]
         public int Blocked { get; set; }
 
+        [JsonProperty("invulnedCount")]
+        public int InvulnedCount { get; set; }
+
         [JsonProperty("min")]
         public int Min { get; set; }
 
@@ -45,5 +48,6 @@ namespace PlenBotLogUploader.DpsReport.ExtraJson
 
         [JsonProperty("indirectDamage")]
         public bool IndirectDamage { get; set; }
+
     }
 }

@@ -36,5 +36,9 @@ public sealed class Defenses
 
     [JsonProperty("boonStrips")]
     public float BoonStrips { get; set; }
+
+    [JsonProperty("invulnedCount")]
+    public int InvulnedCount { get; set; }
+
 }
 

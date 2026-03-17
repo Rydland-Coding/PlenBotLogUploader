@@ -85,6 +85,8 @@ public partial class FormEditDiscordWebhook : Form
         checkBoxIncludeDownsContributionSummary.Checked = data?.IncludeDownsContributionSummary ?? false;
         checkBoxIncludeHealingSummary.Checked = data?.IncludeHealingSummary ?? false;
         checkBoxIncludeBarrierSummary.Checked = data?.IncludeBarrierSummary ?? false;
+        //RYDLAND
+        checkBoxIncludeInvulnerableSummary.Checked = data?.IncludeInvulnerableSummary ?? false;
         //checkBoxCombineHealingBarrier.Checked = data?.CombineHealingBarrier ?? false;
         checkBoxAdjustBarrier.Checked = data?.AdjustBarrier ?? false;
         checkBoxIncludeCleansingSummary.Checked = data?.IncludeCleansingSummary ?? false;
@@ -156,6 +158,8 @@ public partial class FormEditDiscordWebhook : Form
                 IncludeDownsContributionSummary = checkBoxIncludeDownsContributionSummary.Checked,
                 IncludeHealingSummary = checkBoxIncludeHealingSummary.Checked,
                 IncludeBarrierSummary = checkBoxIncludeBarrierSummary.Checked,
+                //RYDLAND
+                IncludeInvulnerableSummary = checkBoxIncludeInvulnerableSummary.Checked,
                 //CombineHealingBarrier = checkBoxCombineHealingBarrier.Checked,
                 AdjustBarrier = checkBoxAdjustBarrier.Checked,
                 IncludeCleansingSummary = checkBoxIncludeCleansingSummary.Checked,
@@ -217,6 +221,8 @@ public partial class FormEditDiscordWebhook : Form
         webhook.IncludeDownsContributionSummary = checkBoxIncludeDownsContributionSummary.Checked;
         webhook.IncludeHealingSummary = checkBoxIncludeHealingSummary.Checked;
         webhook.IncludeBarrierSummary = checkBoxIncludeBarrierSummary.Checked;
+        //RYDLAND
+        webhook.IncludeInvulnerableSummary = checkBoxIncludeInvulnerableSummary.Checked;
         //webhook.CombineHealingBarrier = checkBoxCombineHealingBarrier.Checked;
         webhook.AdjustBarrier = checkBoxAdjustBarrier.Checked;
         webhook.IncludeCleansingSummary = checkBoxIncludeCleansingSummary.Checked;
@@ -466,6 +472,12 @@ public partial class FormEditDiscordWebhook : Form
         //checkBoxCombineHealingBarrier.Checked = checkBoxCombineHealingBarrier.Enabled && checkBoxCombineHealingBarrier.Checked;
     }
 
+    //RYDLAND
+    private void checkBoxIncludeInvulnerableSummary_CheckedChanged(object sender, EventArgs e)
+    {
+
+    }
+
     private void checkBoxIncludeDamageSummary_CheckedChanged(object sender, EventArgs e)
     {
         //checkBoxShowDPSColumn.Enabled = checkBoxIncludeDamageSummary.Checked;
@@ -481,5 +493,26 @@ public partial class FormEditDiscordWebhook : Form
     {
         // Do nothing on change
     }
+
+    private void groupBox1_Enter(object sender, EventArgs e)
+    {
+
+    }
+
+    private void FormEditDiscordWebhook_Load(object sender, EventArgs e)
+    {
+
+    }
+
+    private void checkBoxIncludeCCSummary_CheckedChanged(object sender, EventArgs e)
+    {
+
+    }
+
+    // To be deleted later
+    // private void checkBox1_CheckedChanged(object sender, EventArgs e)
+    //  {
+
+    //  }
 }
 
