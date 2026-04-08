@@ -2,6 +2,7 @@
 using PlenBotLogUploader.AppSettings;
 using PlenBotLogUploader.ArcDps;
 using PlenBotLogUploader.Properties;
+using PlenBotLogUploader.Tools;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,7 +11,6 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using ZLinq;
 
 namespace PlenBotLogUploader;
 
@@ -50,14 +50,17 @@ public partial class FormArcPluginManager : Form
             ApplicationSettings.Current.Gw2Location = "";
             ApplicationSettings.Current.Save();
         }
-        foreach (var component in availableComponents.AsValueEnumerable())
+        foreach (var component in availableComponents.AsSpan())
         {
             var installedComponent = installedComponents.Find(x => x.Type.Equals(component.Type));
             var installed = arcIsInstalled && installedComponent is not null;
-            if (installed && !installedComponent.IsInstalled())
+            if (installed)
             {
-                installed = false;
-                installedComponents.RemoveAll(x => x.Type.Equals(component.Type));
+                if (!installedComponent.IsInstalled())
+                {
+                    installed = false;
+                    installedComponents.RemoveAll(x => x.Type.Equals(component.Type));
+                }
             }
             checkedListBoxArcDpsPlugins.Items.Add(component, installed);
         }

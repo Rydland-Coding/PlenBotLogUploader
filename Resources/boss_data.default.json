@@ -3,7 +3,7 @@
     "bossId": 24033,
     "name": "Aetherblade Hideout",
     "icon": "https://i.imgur.com/UZmW8Sd.png",
-    "type": 1,
+    "type": 3,
     "isEvent": false
   },
   {
@@ -17,7 +17,7 @@
     "bossId": 23957,
     "name": "Ankka",
     "icon": "https://i.imgur.com/orWH6qw.png",
-    "type": 1,
+    "type": 3,
     "isEvent": false
   },
   {
@@ -40,7 +40,7 @@
     "internalDescription": "Berg",
     "icon": "https://i.imgur.com/UZZQUdf.png",
     "type": 1,
-    "isEvent": true
+    "isEvent": false
   },
   {
     "bossId": 16125,
@@ -48,7 +48,7 @@
     "internalDescription": "Narella",
     "icon": "https://i.imgur.com/UZZQUdf.png",
     "type": 1,
-    "isEvent": true
+    "isEvent": false
   },
   {
     "bossId": 16137,
@@ -56,13 +56,13 @@
     "internalDescription": "Zane",
     "icon": "https://i.imgur.com/UZZQUdf.png",
     "type": 1,
-    "isEvent": true
+    "isEvent": false
   },
   {
     "bossId": 22521,
     "name": "Boneskinner",
     "icon": "https://i.imgur.com/meYwQmA.png",
-    "type": 1,
+    "type": 3,
     "isEvent": false
   },
   {
@@ -97,7 +97,7 @@
     "bossId": 25989,
     "name": "Cerus",
     "icon": "https://i.imgur.com/1cGN1UT.png",
-    "type": 1,
+    "type": 3,
     "isEvent": false
   },
   {
@@ -118,15 +118,7 @@
   },
   {
     "bossId": 26774,
-    "name": "Decima",
-    "icon": "https://i.imgur.com/EJJRx02.png",
-    "type": 1,
-    "isEvent": false
-  },
-  {
-    "bossId": 26867,
-    "name": "Decima",
-    "internalDescription": "Challenge Mode",
+    "name": "Decima, the Stormsinger",
     "icon": "https://i.imgur.com/EJJRx02.png",
     "type": 1,
     "isEvent": false
@@ -135,7 +127,7 @@
     "bossId": 25705,
     "name": "Dagda",
     "icon": "https://i.imgur.com/v6vjRsH.png",
-    "type": 1,
+    "type": 3,
     "isEvent": false
   },
   {
@@ -209,14 +201,14 @@
     "bossId": 22492,
     "name": "Fraenir of Jormag",
     "icon": "https://wiki.guildwars2.com/images/6/67/Fraenir_of_Jormag.jpg",
-    "type": 1,
+    "type": 3,
     "isEvent": false
   },
   {
     "bossId": 21333,
     "name": "Freezie",
     "icon": "https://wiki.guildwars2.com/images/thumb/8/8b/Freezie.jpg/800px-Freezie.jpg",
-    "type": 1,
+    "type": 3,
     "isEvent": false
   },
   {
@@ -228,7 +220,7 @@
   },
   {
     "bossId": 26725,
-    "name": "Greer",
+    "name": "Greer, the Blightbringer",
     "icon": "https://i.imgur.com/19lr7VM.png",
     "type": 1,
     "isEvent": false
@@ -237,7 +229,7 @@
     "bossId": 22154,
     "name": "Icebrood Construct",
     "icon": "https://wiki.guildwars2.com/images/f/f4/Mini_Icebrood_Construct.png",
-    "type": 1,
+    "type": 3,
     "isEvent": false
   },
   {
@@ -259,13 +251,6 @@
     "bossId": 16235,
     "name": "Keep Construct",
     "icon": "https://wiki.guildwars2.com/images/e/ea/Mini_Keep_Construct.png",
-    "type": 1,
-    "isEvent": false
-  },
-  {
-    "bossId": 27124,
-    "name": "Kela, Seneschal of Waves",
-    "icon": "https://i.imgur.com/wSpjlSf.png",
     "type": 1,
     "isEvent": false
   },
@@ -332,14 +317,14 @@
     "name": "Minister Li",
     "internalDescription": "Challenge Mode",
     "icon": "https://i.imgur.com/7OutZup.png",
-    "type": 1,
+    "type": 3,
     "isEvent": false
   },
   {
     "bossId": 24485,
     "name": "Minister Li",
     "icon": "https://i.imgur.com/7OutZup.png",
-    "type": 1,
+    "type": 3,
     "isEvent": false
   },
   {
@@ -435,7 +420,7 @@
     "name": "The Dragonvoid",
     "internalDescription": "Void Amalgamate fight trigger 24375",
     "icon": "https://i.imgur.com/gZRqzlr.png",
-    "type": 1,
+    "type": 3,
     "isEvent": false
   },
   {
@@ -443,7 +428,7 @@
     "name": "The Dragonvoid",
     "internalDescription": "Gadget fight trigger 43488",
     "icon": "https://i.imgur.com/gZRqzlr.png",
-    "type": 1,
+    "type": 3,
     "isEvent": false
   },
   {
@@ -451,14 +436,14 @@
     "name": "The Dragonvoid",
     "internalDescription": "Gadget fight trigger 1378",
     "icon": "https://i.imgur.com/gZRqzlr.png",
-    "type": 1,
+    "type": 3,
     "isEvent": false
   },
   {
     "bossId": 22343,
     "name": "The Voice and the Claw of the Fallen",
     "icon": "https://i.imgur.com/lNXXbnC.png",
-    "type": 1,
+    "type": 3,
     "isEvent": false
   },
   {
@@ -472,7 +457,7 @@
   },
   {
     "bossId": 26712,
-    "name": "Ura",
+    "name": "Ura, the Steamshrieker",
     "icon": "https://i.imgur.com/hUdfF7h.png",
     "type": 1,
     "isEvent": false
@@ -488,14 +473,14 @@
     "bossId": 22836,
     "name": "Varinia Stormsounder",
     "icon": "https://i.imgur.com/r9b2oww.png",
-    "type": 1,
+    "type": 3,
     "isEvent": false
   },
   {
     "bossId": 25413,
     "name": "Watchknight Triumvirate",
     "icon": "https://i.imgur.com/Q2g9aLD.png",
-    "type": 1,
+    "type": 3,
     "isEvent": false
   },
   {
@@ -503,7 +488,7 @@
     "name": "Watchknight Triumvirate",
     "internalDescription": "Challenge Mode - Vermillion",
     "icon": "https://i.imgur.com/Q2g9aLD.png",
-    "type": 1,
+    "type": 3,
     "isEvent": false
   },
   {
@@ -511,7 +496,7 @@
     "name": "Watchknight Triumvirate",
     "internalDescription": "Challenge Mode - Arsenite",
     "icon": "https://i.imgur.com/Q2g9aLD.png",
-    "type": 1,
+    "type": 3,
     "isEvent": false
   },
   {
@@ -519,22 +504,14 @@
     "name": "Watchknight Triumvirate",
     "internalDescription": "Challenge Mode - Indigo",
     "icon": "https://i.imgur.com/Q2g9aLD.png",
-    "type": 1,
+    "type": 3,
     "isEvent": false
   },
   {
     "bossId": 22711,
     "name": "Whisper of Jormag",
     "icon": "https://wiki.guildwars2.com/images/c/c0/Mini_Whisper_of_Jormag.png",
-    "type": 1,
-    "isEvent": false
-  },
-  {
-    "bossId": 27010,
-    "name": "Whispering Shadow",
-    "internalDescription": "Kinfall",
-    "icon": "https://i.imgur.com/4Xtgr4D.jpeg",
-    "type": 2,
+    "type": 3,
     "isEvent": false
   },
   {

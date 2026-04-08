@@ -74,6 +74,10 @@ internal class AleevaIntegration : IListViewItemInfo<AleevaIntegration>
         {
             return;
         }
+        if (ApplicationSettings.Current.Aleeva.AccessTokenExpire <= DateTime.Now)
+        {
+            await AleevaStatics.GetAleevaTokenFromRefreshToken(mainLink, controller);
+        }
         if ((SendOnSuccessOnly && !(reportJson.Encounter.Success ?? false))
             || !(Team?.IsSatisfied(players) ?? false))
         {
@@ -93,7 +97,7 @@ internal class AleevaIntegration : IListViewItemInfo<AleevaIntegration>
             }
             var jsonLogObject = JsonConvert.SerializeObject(logObject);
             using var content = new StringContent(jsonLogObject, Encoding.UTF8, "application/json");
-            await controller.PostAsync($"{AleevaStatics.ApiAleevaUrl}/report", content);
+            await controller.PostAsync($"{AleevaStatics.ApiBaseUrl}/report", content);
         }
         catch
         {

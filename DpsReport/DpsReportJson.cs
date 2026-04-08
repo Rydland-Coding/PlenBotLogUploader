@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 using PlenBotLogUploader.AppSettings;
 using PlenBotLogUploader.Tools;
+using System;
 using System.Collections.Generic;
-using ZLinq;
 
 namespace PlenBotLogUploader.DpsReport;
 
@@ -112,7 +112,7 @@ internal sealed class DpsReportJson
         var list = new List<LogPlayer>();
         if (ExtraJson is null)
         {
-            foreach (var player in Players.Values.AsValueEnumerable())
+            foreach (var player in Players.Values)
             {
                 list.Add(new LogPlayer
                 {
@@ -122,7 +122,7 @@ internal sealed class DpsReportJson
             }
             return list;
         }
-        foreach (var player in ExtraJson.Players.AsValueEnumerable())
+        foreach (var player in ExtraJson.Players.AsSpan())
         {
             list.Add(new LogPlayer
             {

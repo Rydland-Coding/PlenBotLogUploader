@@ -2,6 +2,6 @@
 
 internal enum LogSessionSortBy
 {
-    RaidEncounterCategories = 0,
+    Wing = 0,
     UploadTime = 1,
 }

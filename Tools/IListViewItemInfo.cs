@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using ZLinq;
 
 namespace PlenBotLogUploader.Tools;
 
@@ -31,7 +30,7 @@ internal interface IListViewItemInfo<T>
     /// </summary>
     internal void UpdateItems()
     {
-        foreach (var item in ConnectedItems.AsValueEnumerable())
+        foreach (var item in ConnectedItems.AsSpan())
         {
             item?.UpdateData();
         }

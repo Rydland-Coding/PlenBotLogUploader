@@ -3,9 +3,9 @@
 internal enum BossType
 {
     None,
-    RaidEncounter,
+    Raid,
     Fractal,
-    StrikeDoNotUse,
+    Strike,
     Golem,
     WvW,
 }

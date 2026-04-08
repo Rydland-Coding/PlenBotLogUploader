@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using PlenBotLogUploader.AppSettings;
 using PlenBotLogUploader.Tools;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -62,7 +63,7 @@ internal sealed class BossData : IListViewItemInfo<BossData>
 
     string IListViewItemInfo<BossData>.NameToDisplay => BossId.ToString();
 
-    string IListViewItemInfo<BossData>.TextToDisplay => string.IsNullOrWhiteSpace(InternalDescription) ? Name : $"{Name} [{InternalDescription}]";
+    string IListViewItemInfo<BossData>.TextToDisplay => Name + (!string.IsNullOrWhiteSpace(InternalDescription) ? $" [{InternalDescription}]" : "");
 
     bool IListViewItemInfo<BossData>.CheckedToDisplay => false;
 
@@ -96,11 +97,8 @@ internal sealed class BossData : IListViewItemInfo<BossData>
         format = format.Replace("<boss>", FightName(reportJson));
         format = format.Replace("<log>", reportJson.ConfigAwarePermalink);
         format = format.Replace("<pulls>", pullCounter.ToString());
-        format = reportJson.ExtraJson is not null
-            ? format.Replace("<phase>", reportJson.ExtraJson.GetLastPhaseName())
-            : format.Replace("<phase>", "");
-        format = reportJson.ExtraJson is not null
-            ? format.Replace("<percent>", reportJson.ExtraJson.GetLastPhaseTargets())
+        format = reportJson.ExtraJson?.PossiblyLastTarget is not null
+            ? format.Replace("<percent>", $"{reportJson.ExtraJson.PossiblyLastTarget.Name} ({Math.Round(100 - reportJson.ExtraJson.PossiblyLastTarget.HealthPercentBurned, 2)}%)")
             : format.Replace("<percent>", "");
         return format;
     }

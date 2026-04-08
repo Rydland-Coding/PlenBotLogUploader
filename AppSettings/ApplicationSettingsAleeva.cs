@@ -8,6 +8,11 @@ internal sealed class ApplicationSettingsAleeva
 {
 
     private bool _isAuthorised;
+    [JsonProperty("refreshToken")]
+    internal string RefreshToken { get; set; } = "";
+
+    [JsonProperty("refreshTokenExpire")]
+    internal DateTime RefreshTokenExpire { get; set; } = DateTime.Now;
 
     internal bool Authorised
     {
@@ -19,11 +24,9 @@ internal sealed class ApplicationSettingsAleeva
         }
     }
 
-    [JsonProperty("refreshToken")]
-    internal string RefreshToken { get; set; } = "";
+    internal string AccessToken { get; set; }
 
-    [JsonProperty("apiKey")]
-    internal string ApiKey { get; set; } = "";
+    internal DateTime AccessTokenExpire { get; set; }
 
     internal event EventHandler<EventArgs> AuthorisedChanged;
 }

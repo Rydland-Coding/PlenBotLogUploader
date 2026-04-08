@@ -21,6 +21,7 @@
         }
 
         #region Windows Form Designer generated code
+
         /// <summary>
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
@@ -41,15 +42,15 @@
             radioButtonSortByUpload = new System.Windows.Forms.RadioButton();
             labelSessionContent = new System.Windows.Forms.Label();
             textBoxSessionContent = new System.Windows.Forms.TextBox();
-            radioButtonSortByRaidEncounterCategories = new System.Windows.Forms.RadioButton();
+            radioButtonSortByWing = new System.Windows.Forms.RadioButton();
             groupBoxWebhookTypeSelection = new System.Windows.Forms.GroupBox();
             radioButtonExcludeSelectedWebhooks = new System.Windows.Forms.RadioButton();
             groupBoxSelectedWebhooks = new System.Windows.Forms.GroupBox();
-            buttonUnSelectAllWebhooks = new System.Windows.Forms.Button();
             buttonReloadWebhooks = new System.Windows.Forms.Button();
             checkedListBoxSelectedWebhooks = new System.Windows.Forms.CheckedListBox();
             radioButtonOnlySelectedWebhooks = new System.Windows.Forms.RadioButton();
             radioButtonAllActive = new System.Windows.Forms.RadioButton();
+            buttonUnSelectAllWebhooks = new System.Windows.Forms.Button();
             groupBoxSessionSettings.SuspendLayout();
             groupBoxDiscordWebhooks.SuspendLayout();
             groupBoxWebhookTypeSelection.SuspendLayout();
@@ -67,7 +68,7 @@
             buttonSessionStarter.UseVisualStyleBackColor = true;
             buttonSessionStarter.Click += ButtonSessionStarter_Click;
             // 
-            // checkBoxSuppressWebhooks
+            // checkBoxSupressWebhooks
             // 
             checkBoxSuppressWebhooks.AutoSize = true;
             checkBoxSuppressWebhooks.Location = new System.Drawing.Point(8, 29);
@@ -153,7 +154,7 @@
             groupBoxDiscordWebhooks.Controls.Add(radioButtonSortByUpload);
             groupBoxDiscordWebhooks.Controls.Add(labelSessionContent);
             groupBoxDiscordWebhooks.Controls.Add(textBoxSessionContent);
-            groupBoxDiscordWebhooks.Controls.Add(radioButtonSortByRaidEncounterCategories);
+            groupBoxDiscordWebhooks.Controls.Add(radioButtonSortByWing);
             groupBoxDiscordWebhooks.Controls.Add(checkBoxSuppressWebhooks);
             groupBoxDiscordWebhooks.Location = new System.Drawing.Point(8, 160);
             groupBoxDiscordWebhooks.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -217,19 +218,19 @@
             textBoxSessionContent.Size = new System.Drawing.Size(343, 27);
             textBoxSessionContent.TabIndex = 7;
             // 
-            // radioButtonSortByRaidEncounterCategories
+            // radioButtonSortByWing
             // 
-            radioButtonSortByRaidEncounterCategories.AutoSize = true;
-            radioButtonSortByRaidEncounterCategories.Checked = true;
-            radioButtonSortByRaidEncounterCategories.Location = new System.Drawing.Point(8, 126);
-            radioButtonSortByRaidEncounterCategories.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            radioButtonSortByRaidEncounterCategories.Name = "radioButtonSortByRaidEncounterCategories";
-            radioButtonSortByRaidEncounterCategories.Size = new System.Drawing.Size(283, 24);
-            radioButtonSortByRaidEncounterCategories.TabIndex = 0;
-            radioButtonSortByRaidEncounterCategories.TabStop = true;
-            radioButtonSortByRaidEncounterCategories.Text = "sort logs by categories and boss order";
-            radioButtonSortByRaidEncounterCategories.UseVisualStyleBackColor = true;
-            radioButtonSortByRaidEncounterCategories.CheckedChanged += RadioButtonSortByRaidEncounterCategories_CheckedChanged;
+            radioButtonSortByWing.AutoSize = true;
+            radioButtonSortByWing.Checked = true;
+            radioButtonSortByWing.Location = new System.Drawing.Point(8, 126);
+            radioButtonSortByWing.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            radioButtonSortByWing.Name = "radioButtonSortByWing";
+            radioButtonSortByWing.Size = new System.Drawing.Size(246, 24);
+            radioButtonSortByWing.TabIndex = 0;
+            radioButtonSortByWing.TabStop = true;
+            radioButtonSortByWing.Text = "sort logs by wing and boss order";
+            radioButtonSortByWing.UseVisualStyleBackColor = true;
+            radioButtonSortByWing.CheckedChanged += RadioButtonSortByWing_CheckedChanged;
             // 
             // groupBoxWebhookTypeSelection
             // 
@@ -272,16 +273,6 @@
             groupBoxSelectedWebhooks.TabIndex = 3;
             groupBoxSelectedWebhooks.TabStop = false;
             groupBoxSelectedWebhooks.Text = "The list of selected webhooks";
-            // 
-            // buttonUnSelectAllWebhooks
-            // 
-            buttonUnSelectAllWebhooks.Location = new System.Drawing.Point(7, 275);
-            buttonUnSelectAllWebhooks.Name = "buttonUnSelectAllWebhooks";
-            buttonUnSelectAllWebhooks.Size = new System.Drawing.Size(296, 29);
-            buttonUnSelectAllWebhooks.TabIndex = 4;
-            buttonUnSelectAllWebhooks.Text = "(Un)select all webhooks";
-            buttonUnSelectAllWebhooks.UseVisualStyleBackColor = true;
-            buttonUnSelectAllWebhooks.Click += ButtonUnSelectAllWebhooks_Click;
             // 
             // buttonReloadWebhooks
             // 
@@ -330,6 +321,16 @@
             radioButtonAllActive.UseVisualStyleBackColor = true;
             radioButtonAllActive.CheckedChanged += RadioButtonAllActive_CheckedChanged;
             // 
+            // buttonUnSelectAllWebhooks
+            // 
+            buttonUnSelectAllWebhooks.Location = new System.Drawing.Point(7, 275);
+            buttonUnSelectAllWebhooks.Name = "buttonUnSelectAllWebhooks";
+            buttonUnSelectAllWebhooks.Size = new System.Drawing.Size(296, 29);
+            buttonUnSelectAllWebhooks.TabIndex = 4;
+            buttonUnSelectAllWebhooks.Text = "(Un)select all webhooks";
+            buttonUnSelectAllWebhooks.UseVisualStyleBackColor = true;
+            buttonUnSelectAllWebhooks.Click += ButtonUnSelectAllWebhooks_Click;
+            // 
             // FormLogSession
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
@@ -344,6 +345,7 @@
             Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             MaximizeBox = false;
             MinimizeBox = false;
+            Name = "FormLogSession";
             StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             Text = "Log sessions";
             FormClosing += FormLogSession_FormClosing;
@@ -377,7 +379,7 @@
         internal System.Windows.Forms.CheckBox checkBoxSuppressWebhooks;
         internal System.Windows.Forms.TextBox textBoxSessionContent;
         internal System.Windows.Forms.RadioButton radioButtonSortByUpload;
-        internal System.Windows.Forms.RadioButton radioButtonSortByRaidEncounterCategories;
+        internal System.Windows.Forms.RadioButton radioButtonSortByWing;
         internal System.Windows.Forms.CheckBox checkBoxSaveToFile;
         internal System.Windows.Forms.CheckBox checkBoxEnableWvWLogList;
         private System.Windows.Forms.RadioButton radioButtonExcludeSelectedWebhooks;

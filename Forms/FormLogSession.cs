@@ -4,12 +4,10 @@ using PlenBotLogUploader.Properties;
 using PlenBotLogUploader.Tools;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using ZLinq;
 
 namespace PlenBotLogUploader;
 
@@ -29,7 +27,6 @@ public partial class FormLogSession : Form
     }
 
     // properties
-    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     internal bool SessionRunning { get; private set; }
 
     private void FormLogSession_FormClosing(object sender, FormClosingEventArgs e)
@@ -45,18 +42,11 @@ public partial class FormLogSession : Form
 
     private void ButtonSessionStarter_Click(object sender, EventArgs e)
     {
-        StartOrEndSession();
-    }
-
-    internal void StartOrEndSession()
-    {
         if (!SessionRunning && !sessionPaused)
         {
             buttonSessionStarter.Text = "Stop the log session";
             buttonUnPauseSession.Text = "Pause session";
             buttonUnPauseSession.Enabled = true;
-            mainLink.toolStripMenuItemStartStopLogSession.Text = "Stop the log session";
-            mainLink.toolStripMenuItemPauseLogSession.Enabled = true;
             SessionRunning = true;
             sessionPaused = false;
             stopWatch.Start();
@@ -66,8 +56,6 @@ public partial class FormLogSession : Form
         buttonSessionStarter.Text = "Start a log session";
         buttonUnPauseSession.Text = "Pause session";
         buttonUnPauseSession.Enabled = false;
-        mainLink.toolStripMenuItemStartStopLogSession.Text = "Start a log session";
-        mainLink.toolStripMenuItemPauseLogSession.Enabled = false;
         SessionRunning = false;
         sessionPaused = false;
         stopWatch.Stop();
@@ -81,7 +69,7 @@ public partial class FormLogSession : Form
             ShowSuccess = !checkBoxOnlySuccess.Checked,
             ElapsedTime = elapsedTime,
             ElapsedTimeSpan = elapsedTimeSpan,
-            SortBy = radioButtonSortByUpload.Checked ? LogSessionSortBy.UploadTime : LogSessionSortBy.RaidEncounterCategories,
+            SortBy = radioButtonSortByUpload.Checked ? LogSessionSortBy.UploadTime : LogSessionSortBy.Wing,
             MakeWvWSummaryEmbed = checkBoxMakeWvWSummary.Checked,
             EnableWvWLogList = checkBoxEnableWvWLogList.Checked,
             UseSelectedWebhooksInstead = radioButtonOnlySelectedWebhooks.Checked,
@@ -91,7 +79,7 @@ public partial class FormLogSession : Form
         var sessionNameFormatted = CleanSessionName();
         var fileName = $"{(!string.IsNullOrWhiteSpace(sessionNameFormatted) ? $"{sessionNameFormatted} " : "")}{sessionTimeStarted.Year}-{sessionTimeStarted.Month}-{sessionTimeStarted.Day} {sessionTimeStarted.Hour}-{sessionTimeStarted.Minute}-{sessionTimeStarted.Second}";
         File.AppendAllText($"{ApplicationSettings.LocalDir}{fileName}.csv", "Boss;BossId;Success;Duration;RecordedBy;EliteInsightsVersion;arcdpsVersion;Permalink;UserToken\n");
-        foreach (var reportJson in mainLink.SessionLogs.AsValueEnumerable())
+        foreach (var reportJson in mainLink.SessionLogs.AsSpan())
         {
             var success = reportJson.Encounter.Success ?? false ? "true" : "false";
             File.AppendAllText($"{ApplicationSettings.LocalDir}{fileName}.csv",
@@ -100,18 +88,10 @@ public partial class FormLogSession : Form
         _ = SendSessionWebhooks(logSessionSettings);
     }
 
-    internal void PauseOrUnPauseSession()
-    {
-        sessionPaused = !sessionPaused;
-        SessionRunning = !sessionPaused;
-        buttonUnPauseSession.Text = !sessionPaused ? "Pause session" : "Unpause session";
-        mainLink.toolStripMenuItemPauseLogSession.Text = !sessionPaused ? "Pause session" : "Unpause session";
-    }
-
     private string CleanSessionName()
     {
         var sessionNameFormatted = textBoxSessionName.Text.ToLower().Replace(" ", "");
-        foreach (var character in Path.GetInvalidFileNameChars().AsValueEnumerable())
+        foreach (var character in Path.GetInvalidFileNameChars().AsSpan())
         {
             if (!character.Equals('/'))
             {
@@ -129,7 +109,9 @@ public partial class FormLogSession : Form
 
     private void ButtonUnPauseSession_Click(object sender, EventArgs e)
     {
-        PauseOrUnPauseSession();
+        sessionPaused = !sessionPaused;
+        SessionRunning = !sessionPaused;
+        buttonUnPauseSession.Text = !sessionPaused ? "Pause session" : "Unpause session";
     }
 
     internal void CheckBoxSuppressWebhooks_CheckedChanged(object sender, EventArgs e)
@@ -150,9 +132,9 @@ public partial class FormLogSession : Form
         ApplicationSettings.Current.Save();
     }
 
-    private void RadioButtonSortByRaidEncounterCategories_CheckedChanged(object sender, EventArgs e)
+    private void RadioButtonSortByWing_CheckedChanged(object sender, EventArgs e)
     {
-        ApplicationSettings.Current.Session.Sort = LogSessionSortBy.RaidEncounterCategories;
+        ApplicationSettings.Current.Session.Sort = LogSessionSortBy.Wing;
         ApplicationSettings.Current.Save();
     }
 

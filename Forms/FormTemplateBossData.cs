@@ -4,7 +4,6 @@ using PlenBotLogUploader.Properties;
 using System;
 using System.Linq;
 using System.Windows.Forms;
-using ZLinq;
 
 namespace PlenBotLogUploader;
 
@@ -37,7 +36,7 @@ public partial class FormTemplateBossData : Form
         var bossesToChange = Bosses.All
             .Where(x => !x.Type.Equals(BossType.Golem) && !x.Type.Equals(BossType.WvW) && !x.Event)
             .ToArray();
-        foreach (var boss in bossesToChange.AsValueEnumerable())
+        foreach (var boss in bossesToChange.AsSpan())
         {
             boss.SuccessMsg = textBoxSuccessMessage.Text;
         }
@@ -54,7 +53,7 @@ public partial class FormTemplateBossData : Form
         var bossesToChange = Bosses.All
             .Where(x => !x.Type.Equals(BossType.Golem) && !x.Type.Equals(BossType.WvW) && !x.Event)
             .ToArray();
-        foreach (var boss in bossesToChange.AsValueEnumerable())
+        foreach (var boss in bossesToChange.AsSpan())
         {
             boss.FailMsg = textBoxFailMessage.Text;
         }

@@ -4,13 +4,13 @@ using PlenBotLogUploader.Aleeva;
 using PlenBotLogUploader.AppSettings;
 using PlenBotLogUploader.Properties;
 using PlenBotLogUploader.Teams;
+using PlenBotLogUploader.Tools;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using ZLinq;
 
 namespace PlenBotLogUploader;
 
@@ -106,11 +106,10 @@ public partial class FormEditAleevaIntegration : Form
 
     private async Task AleevaLoadServers()
     {
-        if (!ApplicationSettings.Current.Aleeva.Authorised)
+        if (ApplicationSettings.Current.Aleeva.AccessTokenExpire <= DateTime.Now)
         {
-            return;
+            await AleevaStatics.GetAleevaTokenFromRefreshToken(mainLink, controller);
         }
-
         try
         {
             aleevaServers.Clear();
@@ -131,7 +130,7 @@ public partial class FormEditAleevaIntegration : Form
             {
                 comboBoxChannel.Items.Clear();
             }
-            using var response = await controller.GetAsync($"{AleevaStatics.ApiAleevaUrl}/server?mode=UPLOADS");
+            using var response = await controller.GetAsync($"{AleevaStatics.ApiBaseUrl}/server?mode=UPLOADS");
             if (response.IsSuccessStatusCode)
             {
                 var responseMessage = await response.Content.ReadAsStringAsync();
@@ -165,11 +164,10 @@ public partial class FormEditAleevaIntegration : Form
 
     private async Task AleevaLoadChannels(string serverId)
     {
-        if (!ApplicationSettings.Current.Aleeva.Authorised)
+        if (ApplicationSettings.Current.Aleeva.AccessTokenExpire <= DateTime.Now)
         {
-            return;
+            await AleevaStatics.GetAleevaTokenFromRefreshToken(mainLink, controller);
         }
-
         try
         {
             aleevaServerChannels.Clear();
@@ -181,7 +179,7 @@ public partial class FormEditAleevaIntegration : Form
             {
                 comboBoxChannel.Items.Clear();
             }
-            using var response = await controller.GetAsync($"{AleevaStatics.ApiAleevaUrl}/server/{serverId}/channel?mode=UPLOADS");
+            using var response = await controller.GetAsync($"{AleevaStatics.ApiBaseUrl}/server/{serverId}/channel?mode=UPLOADS");
             if (response.IsSuccessStatusCode)
             {
                 var responseMessage = await response.Content.ReadAsStringAsync();
@@ -212,7 +210,7 @@ public partial class FormEditAleevaIntegration : Form
         Process.Start(new ProcessStartInfo
         {
             UseShellExecute = true,
-            FileName = AleevaStatics.AleevaPlenBotHelpPage,
+            FileName = AleevaStatics.Url,
         });
     }
 
@@ -234,7 +232,7 @@ public partial class FormEditAleevaIntegration : Form
 
     private void AddServersToView()
     {
-        foreach (var server in aleevaServers.AsValueEnumerable())
+        foreach (var server in aleevaServers.AsSpan())
         {
             comboBoxServer.Items.Add(server);
         }
@@ -244,7 +242,7 @@ public partial class FormEditAleevaIntegration : Form
     {
         comboBoxChannel.Text = "";
         comboBoxChannel.Items.Clear();
-        foreach (var channel in aleevaServerChannels.AsValueEnumerable())
+        foreach (var channel in aleevaServerChannels.AsSpan())
         {
             comboBoxChannel.Items.Add(channel);
         }

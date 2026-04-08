@@ -2,9 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using ZLinq;
 
 namespace PlenBotLogUploader.Tools;
 
@@ -23,27 +23,23 @@ internal static class LogReuploader
     {
         get
         {
-            if (_failedLogs is not null)
+            if (_failedLogs is null)
             {
-                return _failedLogs;
-            }
-            if (File.Exists(FileLocation))
-            {
-                try
+                if (File.Exists(FileLocation))
                 {
-                    _failedLogs = File.ReadAllLines(FileLocation)
-                        .AsValueEnumerable()
-                        .Where(File.Exists)
-                        .ToHashSet();
+                    try
+                    {
+                        _failedLogs = File.ReadAllLines(FileLocation).Where(File.Exists).ToHashSet();
+                    }
+                    catch
+                    {
+                        _failedLogs = [];
+                    }
                 }
-                catch
+                else
                 {
                     _failedLogs = [];
                 }
-            }
-            else
-            {
-                _failedLogs = [];
             }
             return _failedLogs;
         }
@@ -61,7 +57,7 @@ internal static class LogReuploader
         }
     }
 
-    internal static bool RemoveLogAndSave(string file)
+    internal static bool RemovedLogAndSave(string file)
     {
         var removed = FailedLogs.Remove(file);
         if (removed)
@@ -73,7 +69,7 @@ internal static class LogReuploader
 
     internal static void ProcessLogs(SemaphoreSlim semaphore, Func<string, Dictionary<string, string>, bool, Task> process)
     {
-        foreach (var fileName in FailedLogs.AsValueEnumerable())
+        foreach (var fileName in FailedLogs.ToArray().AsSpan())
         {
             if (!File.Exists(fileName))
             {
@@ -82,7 +78,7 @@ internal static class LogReuploader
             }
             _ = Task.Run(async () =>
             {
-                await semaphore.WaitAsync();
+                semaphore.Wait();
                 await process(fileName, PostData, true);
                 semaphore.Release();
             });

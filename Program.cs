@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using ZLinq;
 
 namespace PlenBotLogUploader;
 
@@ -24,9 +23,9 @@ internal static class Program
             .ToArray();
         var args = Environment.GetCommandLineArgs();
         var localDir = $"{Path.GetDirectoryName(Application.ExecutablePath.Replace('/', '\\'))}\\";
-        switch (args.Length)
+        if (args.Length == 4)
         {
-            case 4 when args[1].Equals("-update", StringComparison.OrdinalIgnoreCase) && args[3].Equals("-m", StringComparison.OrdinalIgnoreCase):
+            if (args[1].Equals("-update", StringComparison.OrdinalIgnoreCase) && args[3].Equals("-m", StringComparison.OrdinalIgnoreCase))
             {
                 if (otherProcesses.Length == 0)
                 {
@@ -39,7 +38,7 @@ internal static class Program
                     });
                     return;
                 }
-                foreach (var process in otherProcesses.AsValueEnumerable())
+                foreach (var process in otherProcesses.AsSpan())
                 {
                     try
                     {
@@ -62,10 +61,14 @@ internal static class Program
                 });
                 return;
             }
-            case 3 when args[2].Equals("-finishupdate", StringComparison.OrdinalIgnoreCase):
+        }
+        else if (args.Length == 3)
+        {
+            if (args[2].Equals("-finishupdate", StringComparison.OrdinalIgnoreCase))
+            {
                 File.Delete($"{localDir}PlenBotLogUploader_Update.exe");
-                break;
-            case 3 when args[1].Equals("-update", StringComparison.OrdinalIgnoreCase):
+            }
+            else if (args[1].Equals("-update", StringComparison.OrdinalIgnoreCase))
             {
                 if (otherProcesses.Length == 0)
                 {
@@ -78,7 +81,7 @@ internal static class Program
                     });
                     return;
                 }
-                foreach (var process in otherProcesses.AsValueEnumerable())
+                foreach (var process in otherProcesses.AsSpan())
                 {
                     try
                     {
@@ -101,32 +104,31 @@ internal static class Program
                 });
                 return;
             }
-            case 2 when args[1].Equals("-finishupdate", StringComparison.OrdinalIgnoreCase):
-                File.Delete($"{localDir}PlenBotLogUploader_Update.exe");
-                break;
-            case 2:
+        }
+        else if (args.Length == 2)
+        {
+            if (args[1].Equals("-finishupdate", StringComparison.OrdinalIgnoreCase))
             {
-                if (args[1].Equals("-resetsettings", StringComparison.OrdinalIgnoreCase))
+                File.Delete($"{localDir}PlenBotLogUploader_Update.exe");
+            }
+            else if (args[1].Equals("-resetsettings", StringComparison.OrdinalIgnoreCase))
+            {
+                using (var registrySubKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true))
                 {
-                    using (var registrySubKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true))
+                    if (registrySubKey.GetValue("PlenBot Log Uploader") is not null)
                     {
-                        if (registrySubKey?.GetValue("PlenBot Log Uploader") != null)
-                        {
-                            registrySubKey.DeleteValue("PlenBot Log Uploader");
-                        }
+                        registrySubKey.DeleteValue("PlenBot Log Uploader");
                     }
-                    new ApplicationSettings().Save();
                 }
-                break;
+                new ApplicationSettings().Save();
             }
         }
-        if (otherProcesses.Length != 0)
+        if (otherProcesses.Length == 0)
         {
-            return;
+            Application.EnableVisualStyles();
+            Application.SetHighDpiMode(HighDpiMode.SystemAware);
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new FormMain());
         }
-        Application.EnableVisualStyles();
-        Application.SetHighDpiMode(HighDpiMode.SystemAware);
-        Application.SetCompatibleTextRenderingDefault(false);
-        Application.Run(new FormMain());
     }
 }

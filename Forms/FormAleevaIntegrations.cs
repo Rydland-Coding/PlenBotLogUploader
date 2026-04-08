@@ -7,10 +7,8 @@ using PlenBotLogUploader.Tools;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using ZLinq;
 
 namespace PlenBotLogUploader;
 
@@ -26,7 +24,6 @@ public partial class FormAleevaIntegrations : Form
         InitializeComponent();
         Icon = Resources.aleeva_icon;
         ApplicationSettings.Current.Aleeva.AuthorisedChanged += OnAuthoriseResult;
-        textBoxAccessCode.Text = ApplicationSettings.Current.Aleeva.ApiKey;
         AleevaIntegrations.LoadAleevaIntegrations();
         RedrawAleevaIntegrations();
     }
@@ -38,43 +35,30 @@ public partial class FormAleevaIntegrations : Form
         Hide();
     }
 
-    internal async Task VerifyAleevaApiKey()
+    internal async Task GetAleevaTokenFromRefreshToken()
     {
-        buttonVerifyCode.Enabled = false;
-        if (!ApplicationSettings.Current.Aleeva.Authorised)
-        {
-            string apiKey = string.IsNullOrEmpty(ApplicationSettings.Current.Aleeva.ApiKey) ? textBoxAccessCode.Text : ApplicationSettings.Current.Aleeva.ApiKey;
-            await AleevaStatics.VerifyAleevaApiKey(mainLink, controller, apiKey);
-        }
-        else // deauthorise
-        {
-            ApplicationSettings.Current.Aleeva.Authorised = false;
-            ApplicationSettings.Current.Aleeva.ApiKey = "";
-            ApplicationSettings.Current.Save();
-        }
-        buttonVerifyCode.Enabled = true;
+        await AleevaStatics.GetAleevaTokenFromRefreshToken(mainLink, controller);
     }
 
     private void OnAuthoriseResult(object sender, EventArgs e)
     {
         var toggle = ApplicationSettings.Current.Aleeva.Authorised;
         groupBoxAleevaStatus.Enabled = toggle;
-        listViewAleevaIntegrations.Enabled = toggle;
         if (groupBoxAleevaStatus.InvokeRequired)
         {
-            groupBoxAleevaStatus.Invoke((Action)(() => groupBoxAleevaStatus.Text = toggle ? "Status: API key verified" : "Status: API key not verified"));
+            groupBoxAleevaStatus.Invoke((Action)(() => groupBoxAleevaStatus.Text = toggle ? "Status: Aleeva successfully authorised" : "Status: Not authorised"));
         }
         else
         {
-            groupBoxAleevaStatus.Text = toggle ? "Status: API key verified" : "Status: API key not verified";
+            groupBoxAleevaStatus.Text = toggle ? "Status: Aleeva successfully authorised" : "Status: Not authorised";
         }
-        if (buttonVerifyCode.InvokeRequired)
+        if (buttonGetBearerFromAccess.InvokeRequired)
         {
-            buttonVerifyCode.Invoke((Action)(() => buttonVerifyCode.Text = toggle ? "Change key" : "Verify key"));
+            buttonGetBearerFromAccess.Invoke((Action)(() => buttonGetBearerFromAccess.Text = toggle ? "Deauthorise" : "Authorise"));
         }
         else
         {
-            buttonVerifyCode.Text = toggle ? "Change key" : "Verify key";
+            buttonGetBearerFromAccess.Text = toggle ? "Deauthorise" : "Authorise";
         }
         if (textBoxAccessCode.InvokeRequired)
         {
@@ -86,9 +70,29 @@ public partial class FormAleevaIntegrations : Form
         }
     }
 
-    private async void ButtonVerifyCode_Click(object sender, EventArgs e)
+    private async void ButtonGetBearerFromAccess_Click(object sender, EventArgs e)
     {
-        await VerifyAleevaApiKey();
+        if (string.IsNullOrEmpty(ApplicationSettings.Current.Aleeva.AccessToken))
+        {
+            await AleevaStatics.GetAleevaTokenFromAccessCode(mainLink, controller, textBoxAccessCode.Text);
+            return;
+        }
+        DeauthoriseAleeva();
+    }
+
+    private void DeauthoriseAleeva()
+    {
+        if (InvokeRequired)
+        {
+            Invoke(DeauthoriseAleeva);
+            return;
+        }
+        ApplicationSettings.Current.Aleeva.AccessToken = "";
+        ApplicationSettings.Current.Aleeva.AccessTokenExpire = DateTime.Now;
+        ApplicationSettings.Current.Aleeva.Authorised = false;
+        ApplicationSettings.Current.Aleeva.RefreshToken = "";
+        ApplicationSettings.Current.Aleeva.RefreshTokenExpire = DateTime.Now;
+        ApplicationSettings.Current.Save();
     }
 
     internal void RedrawAleevaIntegrations()
@@ -99,7 +103,7 @@ public partial class FormAleevaIntegrations : Form
             return;
         }
         listViewAleevaIntegrations.Items.Clear();
-        foreach (var integration in AleevaIntegrations.All.AsValueEnumerable())
+        foreach (var integration in AleevaIntegrations.All.AsSpan())
         {
             listViewAleevaIntegrations.Items.Add(new ListViewItemCustom<AleevaIntegration> { Item = integration });
         }
@@ -168,14 +172,5 @@ public partial class FormAleevaIntegrations : Form
         var toggle = listViewAleevaIntegrations.SelectedItems.Count > 0;
         toolStripMenuItemEdit.Enabled = toggle;
         toolStripMenuItemDelete.Enabled = toggle;
-    }
-    private void FormAleevaIntegrations_HelpButtonClicked(object sender, CancelEventArgs e)
-    {
-        e.Cancel = true;
-        Process.Start(new ProcessStartInfo
-        {
-            UseShellExecute = true,
-            FileName = AleevaStatics.AleevaPlenBotHelpPage,
-        });
     }
 }

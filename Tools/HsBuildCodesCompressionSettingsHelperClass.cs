@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using ZLinq;
 using static Hardstuck.GuildWars2.BuildCodes.V2.Static;
 
 namespace PlenBotLogUploader.Tools;
@@ -20,7 +19,7 @@ internal sealed class HsBuildCodesCompressionSettingsHelperClass
                 return _all;
             }
             _all = [];
-            foreach (var compressionOption in Enum.GetValues<CompressionOptions>().AsValueEnumerable())
+            foreach (var compressionOption in Enum.GetValues<CompressionOptions>().AsSpan())
             {
                 if (compressionOption.Equals(CompressionOptions.ALL) || compressionOption.Equals(CompressionOptions.NONE))
                 {

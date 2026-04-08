@@ -40,7 +40,6 @@ public partial class FormPings : Form
             });
         }
     }
-    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     internal IDictionary<int, PingConfiguration> AllPings { get; init; }
 
     private static IDictionary<int, PingConfiguration> LoadFromJsonFile(string filePath)

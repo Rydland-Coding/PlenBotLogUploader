@@ -5,7 +5,6 @@ using PlenBotLogUploader.Twitch;
 using System;
 using System.ComponentModel;
 using System.Windows.Forms;
-using ZLinq;
 
 namespace PlenBotLogUploader;
 
@@ -16,7 +15,7 @@ public partial class FormTwitchCommands : Form
         InitializeComponent();
         Icon = Resources.AppIcon;
         TwitchCommands.Load();
-        foreach (var command in TwitchCommands.All.AsValueEnumerable())
+        foreach (var command in TwitchCommands.All.AsSpan())
         {
             listViewTwitchCommands.Items.Add(new ListViewItemCustom<TwitchCommand>
             {
