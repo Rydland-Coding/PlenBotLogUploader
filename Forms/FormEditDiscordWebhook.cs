@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using ZLinq;
 
 namespace PlenBotLogUploader;
 
@@ -70,7 +71,7 @@ public partial class FormEditDiscordWebhook : Form
             comboBoxTeam.Items.Add(team);
         }
         comboBoxTeam.SelectedItem = data?.Team ?? teams[0];
-        foreach (var boss in bosses.AsSpan())
+        foreach (var boss in bosses.AsValueEnumerable())
         {
             checkedListBoxBossesEnable.Items.Add(new BossesDisableHelperClass()
             {
@@ -304,13 +305,13 @@ public partial class FormEditDiscordWebhook : Form
         }
     }
 
-    private void ButtonUnSelectAllRaids_Click(object sender, EventArgs e)
+    private void ButtonUnSelectAllRaidEncounters_Click(object sender, EventArgs e)
     {
         var allSelected = true;
         for (var i = 0; i < checkedListBoxBossesEnable.Items.Count; i++)
         {
             var item = (BossesDisableHelperClass)checkedListBoxBossesEnable.Items[i];
-            if ((Bosses.All.Find(x => x.BossId.Equals(item.BossId))?.Type.Equals(BossType.Raid) ?? false) && !checkedListBoxBossesEnable.GetItemChecked(i))
+            if ((Bosses.All.Find(x => x.BossId.Equals(item.BossId))?.Type.Equals(BossType.RaidEncounter) ?? false) && !checkedListBoxBossesEnable.GetItemChecked(i))
             {
                 allSelected = false;
                 break;
@@ -321,7 +322,7 @@ public partial class FormEditDiscordWebhook : Form
             for (var i = 0; i < checkedListBoxBossesEnable.Items.Count; i++)
             {
                 var item = (BossesDisableHelperClass)checkedListBoxBossesEnable.Items[i];
-                if (Bosses.All.Find(x => x.BossId.Equals(item.BossId))?.Type.Equals(BossType.Raid) ?? false)
+                if (Bosses.All.Find(x => x.BossId.Equals(item.BossId))?.Type.Equals(BossType.RaidEncounter) ?? false)
                 {
                     checkedListBoxBossesEnable.SetItemChecked(i, true);
                 }
@@ -331,7 +332,7 @@ public partial class FormEditDiscordWebhook : Form
         for (var i = 0; i < checkedListBoxBossesEnable.Items.Count; i++)
         {
             var item = (BossesDisableHelperClass)checkedListBoxBossesEnable.Items[i];
-            if (Bosses.All.Find(x => x.BossId.Equals(item.BossId))?.Type.Equals(BossType.Raid) ?? false)
+            if (Bosses.All.Find(x => x.BossId.Equals(item.BossId))?.Type.Equals(BossType.RaidEncounter) ?? false)
             {
                 checkedListBoxBossesEnable.SetItemChecked(i, false);
             }
@@ -366,40 +367,6 @@ public partial class FormEditDiscordWebhook : Form
         {
             var item = (BossesDisableHelperClass)checkedListBoxBossesEnable.Items[i];
             if (Bosses.All.Find(x => x.BossId.Equals(item.BossId))?.Type.Equals(BossType.Fractal) ?? false)
-            {
-                checkedListBoxBossesEnable.SetItemChecked(i, false);
-            }
-        }
-    }
-
-    private void ButtonUnSelectAllStrikes_Click(object sender, EventArgs e)
-    {
-        var allSelected = true;
-        for (var i = 0; i < checkedListBoxBossesEnable.Items.Count; i++)
-        {
-            var item = (BossesDisableHelperClass)checkedListBoxBossesEnable.Items[i];
-            if ((Bosses.All.Find(x => x.BossId.Equals(item.BossId))?.Type.Equals(BossType.Strike) ?? false) && !checkedListBoxBossesEnable.GetItemChecked(i))
-            {
-                allSelected = false;
-                break;
-            }
-        }
-        if (!allSelected)
-        {
-            for (var i = 0; i < checkedListBoxBossesEnable.Items.Count; i++)
-            {
-                var item = (BossesDisableHelperClass)checkedListBoxBossesEnable.Items[i];
-                if (Bosses.All.Find(x => x.BossId.Equals(item.BossId))?.Type.Equals(BossType.Strike) ?? false)
-                {
-                    checkedListBoxBossesEnable.SetItemChecked(i, true);
-                }
-            }
-            return;
-        }
-        for (var i = 0; i < checkedListBoxBossesEnable.Items.Count; i++)
-        {
-            var item = (BossesDisableHelperClass)checkedListBoxBossesEnable.Items[i];
-            if (Bosses.All.Find(x => x.BossId.Equals(item.BossId))?.Type.Equals(BossType.Strike) ?? false)
             {
                 checkedListBoxBossesEnable.SetItemChecked(i, false);
             }

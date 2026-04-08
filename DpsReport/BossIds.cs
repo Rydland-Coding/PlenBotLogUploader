@@ -70,6 +70,9 @@ internal enum BossIds
     Ura = 26712,
     Decima = 26774,
     Greer = 26725,
+    DecimaCM = 26867,
+    WhisperingShadow = 27010,
+    KelaSeneschalOfWaves = 27124,
     TheDragonvoidGadget1 = 43488,
     ConjuredAmalgamate = 43974,
 }

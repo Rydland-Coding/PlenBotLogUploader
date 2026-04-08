@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using ZLinq;
 
 namespace PlenBotLogUploader.Tools;
 
@@ -40,38 +41,40 @@ internal static class SessionTextConstructor
         var discordEmbedsFailure = new List<DiscordApiJsonContentEmbed>();
         DiscordApiJsonContentEmbed discordEmbedSummary = null;
 
-        var raidLogs = logSessionSettings.SortBy.Equals(LogSessionSortBy.Wing) ?
+        var raidEncounterLogs = logSessionSettings.SortBy.Equals(LogSessionSortBy.RaidEncounterCategories) ?
             reportsJson
-                .Where(x => Bosses.GetWingForBoss(x.Evtc.BossId) > 0)
-                .Select(x => new { LogData = x, RaidWing = Bosses.GetWingForBoss(x.Evtc.BossId) })
-                .OrderBy(x => Bosses.GetWingForBoss(x.LogData.Evtc.BossId))
+                .AsValueEnumerable()
+                .Where(x => Bosses.GetCategoryForBoss(x.Evtc.BossId) > 0)
+                .Select(x => new { LogData = x, RaidEncounterCategory = Bosses.GetCategoryForBoss(x.Evtc.BossId) })
+                .OrderBy(x => (int)x.RaidEncounterCategory)
                 .ThenBy(x => Bosses.GetBossOrder(x.LogData.Encounter.BossId))
                 .ThenBy(x => x.LogData.UploadTime)
                 .ToArray() :
             reportsJson
-                .Where(x => Bosses.GetWingForBoss(x.Evtc.BossId) > 0)
-                .Select(x => new { LogData = x, RaidWing = Bosses.GetWingForBoss(x.Evtc.BossId) })
+                .AsValueEnumerable()
+                .Where(x => Bosses.GetCategoryForBoss(x.Evtc.BossId) > 0)
+                .Select(x => new { LogData = x, RaidEncounterCategory = Bosses.GetCategoryForBoss(x.Evtc.BossId) })
                 .OrderBy(x => x.LogData.UploadTime)
                 .ToArray();
         var fractalLogs = reportsJson
-            .Where(x => Bosses.All
+            .AsValueEnumerable()
+            .Where(x => Bosses.All.AsValueEnumerable()
                 .Any(y => y.BossId.Equals(x.Evtc.BossId) && y.Type.Equals(BossType.Fractal)))
             .ToArray();
-        var strikeLogs = reportsJson
-            .Where(x => Bosses.All
-                .Any(y => y.BossId.Equals(x.Evtc.BossId) && y.Type.Equals(BossType.Strike)))
-            .ToArray();
         var golemLogs = reportsJson
-            .Where(x => Bosses.All
+            .AsValueEnumerable()
+            .Where(x => Bosses.All.AsValueEnumerable()
                 .Any(y => y.BossId.Equals(x.Evtc.BossId) && y.Type.Equals(BossType.Golem)))
             .ToArray();
         var wvwLogs = reportsJson
-            .Where(x => Bosses.All
+            .AsValueEnumerable()
+            .Where(x => Bosses.All.AsValueEnumerable()
                 .Any(y => y.BossId.Equals(x.Evtc.BossId) && y.Type.Equals(BossType.WvW)))
             .ToArray();
         var otherLogs = reportsJson
+            .AsValueEnumerable()
             .Where(x =>
-                Bosses.All
+                Bosses.All.AsValueEnumerable()
                     .Any(y => y.BossId.Equals(x.Evtc.BossId) && y.Type.Equals(BossType.None)) ||
                 !Bosses.All
                     .Any(y => y.BossId.Equals(x.Evtc.BossId)))
@@ -83,12 +86,12 @@ internal static class SessionTextConstructor
         var builderFailure = wvwLogs.Length > 0 && logSessionSettings.MakeWvWSummaryEmbed ? new StringBuilder() : new StringBuilder($"{durationText}\n\n");
         int messageSuccessFailureCount = 0, messageSuccessCount = 0, messageFailureCount = 0;
 
-        if (raidLogs.Length > 0)
+        if (raidEncounterLogs.Length > 0)
         {
-            builderSuccessFailure.Append("***Raid logs:***\n");
+            builderSuccessFailure.Append("***Raid encounter logs:***\n");
             if (logSessionSettings.SortBy.Equals(LogSessionSortBy.UploadTime))
             {
-                foreach (var data in raidLogs.AsSpan())
+                foreach (var data in raidEncounterLogs.AsValueEnumerable())
                 {
                     var bossName = data.LogData.Encounter.Boss + (data.LogData.ChallengeMode ? " CM" : "");
                     var bossData = Bosses.GetBossDataFromId(data.LogData.Encounter.BossId);
@@ -116,7 +119,7 @@ internal static class SessionTextConstructor
                         messageSuccessFailureCount++;
                         discordEmbedsSuccessFailure.Add(MakeEmbedFromText(logSessionSettings.Name + (messageSuccessFailureCount > 1 ? $" part {messageSuccessFailureCount}" : ""), builderSuccessFailure.ToString()));
                         builderSuccessFailure.Clear();
-                        builderSuccessFailure.Append("***Raid logs:***\n");
+                        builderSuccessFailure.Append("***Raid encounter logs:***\n");
                     }
                     if (data.LogData.Encounter.Success ?? false)
                     {
@@ -126,7 +129,7 @@ internal static class SessionTextConstructor
                             messageSuccessCount++;
                             discordEmbedsSuccess.Add(MakeEmbedFromText(logSessionSettings.Name + (messageSuccessCount > 1 ? $" part {messageSuccessCount}" : ""), builderSuccess.ToString()));
                             builderSuccess.Clear();
-                            builderSuccess.Append("***Raid logs:***\n");
+                            builderSuccess.Append("***Raid encounter logs:***\n");
                         }
                     }
                     else
@@ -137,22 +140,22 @@ internal static class SessionTextConstructor
                             messageFailureCount++;
                             discordEmbedsFailure.Add(MakeEmbedFromText(logSessionSettings.Name + (messageFailureCount > 1 ? $" part {messageFailureCount}" : ""), builderFailure.ToString()));
                             builderFailure.Clear();
-                            builderFailure.Append("***Raid logs:***\n");
+                            builderFailure.Append("***Raid encounter logs:***\n");
                         }
                     }
                 }
             }
             else
             {
-                var lastWing = 0;
-                foreach (var data in raidLogs.AsSpan())
+                var lastCategory = RaidEncounterCategory.Unknown;
+                foreach (var data in raidEncounterLogs.AsValueEnumerable())
                 {
-                    if (!lastWing.Equals(Bosses.GetWingForBoss(data.LogData.Evtc.BossId)))
+                    if (!lastCategory.Equals(Bosses.GetCategoryForBoss(data.LogData.Evtc.BossId)))
                     {
-                        builderSuccessFailure.Append("**").Append(Bosses.GetWingName(data.RaidWing)).Append(" (wing ").Append(data.RaidWing).Append(")**\n");
-                        builderSuccess.Append("**").Append(Bosses.GetWingName(data.RaidWing)).Append(" (wing ").Append(data.RaidWing).Append(")**\n");
-                        builderFailure.Append("**").Append(Bosses.GetWingName(data.RaidWing)).Append(" (wing ").Append(data.RaidWing).Append(")**\n");
-                        lastWing = Bosses.GetWingForBoss(data.LogData.Evtc.BossId);
+                        builderSuccessFailure.Append("**").Append(Bosses.GetRaidEncounterCategoryName(data.RaidEncounterCategory)).Append("**\n");
+                        builderSuccess.Append("**").Append(Bosses.GetRaidEncounterCategoryName(data.RaidEncounterCategory)).Append("**\n");
+                        builderFailure.Append("**").Append(Bosses.GetRaidEncounterCategoryName(data.RaidEncounterCategory)).Append("**\n");
+                        lastCategory = Bosses.GetCategoryForBoss(data.LogData.Evtc.BossId);
                     }
                     var bossName = data.LogData.Encounter.Boss + (data.LogData.ChallengeMode ? " CM" : "");
                     var bossData = Bosses.GetBossDataFromId(data.LogData.Encounter.BossId);
@@ -180,7 +183,7 @@ internal static class SessionTextConstructor
                         messageSuccessFailureCount++;
                         discordEmbedsSuccessFailure.Add(MakeEmbedFromText(logSessionSettings.Name + (messageSuccessFailureCount > 1 ? $" part {messageSuccessFailureCount}" : ""), builderSuccessFailure.ToString()));
                         builderSuccessFailure.Clear();
-                        builderSuccessFailure.Append("**").Append(Bosses.GetWingName(data.RaidWing)).Append(" (wing ").Append(data.RaidWing).Append(")**\n");
+                        builderSuccessFailure.Append("**").Append(Bosses.GetRaidEncounterCategoryName(data.RaidEncounterCategory)).Append("**\n");
                     }
                     if (data.LogData.Encounter.Success ?? false)
                     {
@@ -190,7 +193,7 @@ internal static class SessionTextConstructor
                             messageSuccessCount++;
                             discordEmbedsSuccess.Add(MakeEmbedFromText(logSessionSettings.Name + (messageSuccessCount > 1 ? $" part {messageSuccessCount}" : ""), builderSuccess.ToString()));
                             builderSuccess.Clear();
-                            builderSuccess.Append("***Raid logs:***\n");
+                            builderSuccess.Append("***Raid encounter logs:***\n");
                         }
                     }
                     else
@@ -201,7 +204,7 @@ internal static class SessionTextConstructor
                             messageFailureCount++;
                             discordEmbedsFailure.Add(MakeEmbedFromText(logSessionSettings.Name + (messageFailureCount > 1 ? $" part {messageFailureCount}" : ""), builderFailure.ToString()));
                             builderFailure.Clear();
-                            builderFailure.Append("***Raid logs:***\n");
+                            builderFailure.Append("***Raid encounter logs:***\n");
                         }
                     }
                 }
@@ -224,7 +227,7 @@ internal static class SessionTextConstructor
             builderSuccessFailure.Append("***Fractal logs:***\n");
             builderSuccess.Append("***Fractal logs:***\n");
             builderFailure.Append("***Fractal logs:***\n");
-            foreach (var log in fractalLogs.AsSpan())
+            foreach (var log in fractalLogs.AsValueEnumerable())
             {
                 var bossName = log.Encounter.Boss;
                 var bossData = Bosses.GetBossDataFromId(log.Encounter.BossId);
@@ -278,77 +281,6 @@ internal static class SessionTextConstructor
                 }
             }
         }
-        if (strikeLogs.Length > 0)
-        {
-            if (!builderSuccessFailure.ToString().EndsWith("***\n"))
-            {
-                builderSuccessFailure.Append("\n\n");
-            }
-            if (!builderSuccess.ToString().EndsWith("***\n"))
-            {
-                builderSuccess.Append("\n\n");
-            }
-            if (!builderFailure.ToString().EndsWith("***\n"))
-            {
-                builderFailure.Append("\n\n");
-            }
-            builderSuccessFailure.Append("***Strike mission logs:***\n");
-            builderSuccess.Append("***Strike mission logs:***\n");
-            builderFailure.Append("***Strike mission logs:***\n");
-            foreach (var log in strikeLogs.AsSpan())
-            {
-                var bossName = log.Encounter.Boss;
-                var bossData = Bosses.GetBossDataFromId(log.Encounter.BossId);
-                if (bossData is not null)
-                {
-                    bossName = bossData.FightName(log);
-                }
-                var duration = log.ExtraJson is not null ? $" {log.ExtraJson.Duration}" : "";
-                var successText = "";
-                if (logSessionSettings.ShowSuccess)
-                {
-                    if (log.Encounter.Success ?? false)
-                    {
-                        successText = " :white_check_mark:";
-                    }
-                    else
-                    {
-                        successText = " ❌";
-                    }
-                }
-
-                builderSuccessFailure.Append('[').Append(bossName).Append("](").Append(log.ConfigAwarePermalink).Append(')').Append(duration).Append(successText).Append('\n');
-                if (builderSuccessFailure.Length >= maxAllowedMessageSize)
-                {
-                    messageSuccessFailureCount++;
-                    discordEmbedsSuccessFailure.Add(MakeEmbedFromText(logSessionSettings.Name + (messageSuccessFailureCount > 1 ? $" part {messageSuccessFailureCount}" : ""), builderSuccessFailure.ToString()));
-                    builderSuccessFailure.Clear();
-                    builderSuccessFailure.Append("***Strike mission logs:***\n");
-                }
-                if (log.Encounter.Success ?? false)
-                {
-                    builderSuccess.Append('[').Append(bossName).Append("](").Append(log.ConfigAwarePermalink).Append(')').Append(duration).Append(successText).Append('\n');
-                    if (builderSuccess.Length >= maxAllowedMessageSize)
-                    {
-                        messageSuccessCount++;
-                        discordEmbedsSuccess.Add(MakeEmbedFromText(logSessionSettings.Name + (messageSuccessCount > 1 ? $" part {messageSuccessCount}" : ""), builderSuccess.ToString()));
-                        builderSuccess.Clear();
-                        builderSuccess.Append("***Strike mission logs:***\n");
-                    }
-                }
-                else
-                {
-                    builderFailure.Append('[').Append(bossName).Append("](").Append(log.ConfigAwarePermalink).Append(')').Append(duration).Append(successText).Append('\n');
-                    if (builderFailure.Length >= maxAllowedMessageSize)
-                    {
-                        messageFailureCount++;
-                        discordEmbedsFailure.Add(MakeEmbedFromText(logSessionSettings.Name + (messageFailureCount > 1 ? $" part {messageFailureCount}" : ""), builderFailure.ToString()));
-                        builderFailure.Clear();
-                        builderFailure.Append("***Strike mission logs:***\n");
-                    }
-                }
-            }
-        }
         if (golemLogs.Length > 0)
         {
             if (!builderSuccessFailure.ToString().EndsWith("***\n"))
@@ -366,7 +298,7 @@ internal static class SessionTextConstructor
             builderSuccessFailure.Append("***Golem logs:***\n");
             builderSuccess.Append("***Golem logs:***\n");
             builderFailure.Append("***Golem logs:***\n");
-            foreach (var log in golemLogs.AsSpan())
+            foreach (var log in golemLogs.AsValueEnumerable())
             {
                 builderSuccessFailure.Append(log.ConfigAwarePermalink).Append('\n');
                 if (builderSuccessFailure.Length >= maxAllowedMessageSize)
@@ -441,7 +373,7 @@ internal static class SessionTextConstructor
                 builderSuccessFailure.Append("***WvW logs:***\n");
                 builderSuccess.Append("***WvW logs:***\n");
                 builderFailure.Append("***WvW logs:***\n");
-                foreach (var log in wvwLogs.AsSpan())
+                foreach (var log in wvwLogs.AsValueEnumerable())
                 {
                     builderSuccessFailure.Append(log.ConfigAwarePermalink).Append('\n');
                     if (builderSuccessFailure.Length >= maxAllowedMessageSize)
@@ -493,7 +425,7 @@ internal static class SessionTextConstructor
             builderSuccessFailure.Append("***Other logs:***\n");
             builderSuccess.Append("***Other logs:***\n");
             builderFailure.Append("***Other logs:***\n");
-            foreach (var log in otherLogs.AsSpan())
+            foreach (var log in otherLogs.AsValueEnumerable())
             {
                 var bossName = Bosses.GetBossDataFromId(log.Encounter.BossId)?.Name ?? log.Encounter.Boss;
                 var duration = log.ExtraJson is not null ? $" {log.ExtraJson.Duration}" : "";
